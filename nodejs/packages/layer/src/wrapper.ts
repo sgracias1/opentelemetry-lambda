@@ -69,6 +69,13 @@ declare global {
   function configureInstrumentations(): Instrumentation[]
 }
 
+function configureLambdaInstrumentation(config: AwsLambdaInstrumentationConfig): AwsLambdaInstrumentationConfig {
+  config.requestHook = (span, {event, context }) => {
+    span.setAttribute('event.domainName', event.requestContext.domainName);
+  }
+  return config
+}
+
 console.log('Registering OpenTelemetry');
 
 const instrumentations = [
